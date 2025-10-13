@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wind Turbine Energy Prediction</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    background: url('{{ url_for("static", filename="images/turbines.jpg") }}') no-repeat center center fixed;
+    background-size: cover;
+    transition: background-position 0.1s;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.45);
+    z-index: 0;
+  }
+
+  .form-box {
+    position: relative;
+    z-index: 1;
+    width: 380px;
+    padding: 40px 35px;
+    border-radius: 35px 5px 35px 5px;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.5), 0 0 35px rgba(255,165,0,0.2);
+    text-align: center;
+    transform: rotate(0deg);
+    animation: float 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-15px) rotate(0deg); }
+  }
+
+  h2 {
+    font-size: 26px;
+    margin-bottom: 25px;
+    color: #ffe7c2;
+    text-shadow: 0 0 10px rgba(255,223,150,0.5);
+  }
+
+  input[type="number"] {
+    width: 80%;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 25px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  input::placeholder {
+    color: #ffd580;
+    font-weight: 500;
+  }
+
+  input[type="number"]:focus {
+    background: rgba(255,255,255,0.2);
+    box-shadow: 0 0 10px rgba(255,215,0,0.5);
+    border: 1px solid #ffd580;
+  }
+
+  button {
+    margin-top: 15px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff8c00, #ff4500);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 18px rgba(255,140,0,0.6);
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #ffa500, #ff6347);
+    box-shadow: 0 0 25px rgba(255,140,0,0.8);
+  }
+
+  @media (max-width: 768px) {
+    .form-box {
+      width: 85%;
+      padding: 30px;
+      border-radius: 25px;
+      animation: none;
+    }
+    h2 { font-size: 22px; }
+    input[type="number"] { font-size: 14px; }
+    button { font-size: 14px; padding: 10px 25px; }
+  }
+
+  /* Prediction Display */
+  .prediction {
+    margin-top: 20px;
+    color: #ffd580;
+    font-size: 18px;
+    text-shadow: 0 0 8px rgba(255,215,0,0.7);
+  }
+</style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="form-box">
+    <h2>🌬️ Predict Wind Turbine Energy Output</h2>
+    <form method="POST">
+      <select name="location" required style="width: 80%; padding: 12px; margin: 12px 0; border-radius: 25px; border: 1px solid #ccc; background: white; color: black; font-size: 16px; outline: none;">
+        <option value="" disabled selected>Select Location</option>
+        <option value="Coastal">Coastal</option>
+        <option value="Inland">Inland</option>
+        <option value="Mountain">Mountain</option>
+      </select><br>
+      <input type="number" step="0.01" name="wind_speed" placeholder="Wind Speed (m/s)" required><br>
+      <input type="number" step="0.01" name="temperature" placeholder="Temperature (°C)" required><br>
+      <input type="number" step="0.01" name="humidity" placeholder="Humidity (%)" required><br>
+      <input type="number" step="0.01" name="pressure" placeholder="Pressure (hPa)" required><br>
+      <button type="submit">Predict</button>
+      <button class="back-btn" onclick="window.location.href='/'">Back To Home</button>
+
+    </form>
+
+    {% if prediction is not none %}
+      <div class="prediction">
+        Predicted Energy Output: {{ prediction }} kW
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    const body = document.body;
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      body.style.backgroundPosition = `calc(50% + ${x}px) calc(50% + ${y}px)`;
+    });
+  </script>
+</body>
+</html>

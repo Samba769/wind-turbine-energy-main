@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>About Wind Energy Prediction</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: url('{{ url_for("static", filename="images/wind.jpg") }}') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    line-height: 1.6;
+  }
+
+  .overlay {
+    position: absolute; top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.6); z-index:0;
+  }
+
+  .container {
+    position: relative; z-index:1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px 20px;
+  }
+
+  h1 {
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #ffd580;
+    text-shadow: 0 0 10px rgba(255,223,150,0.5);
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #ffe7c2;
+    text-shadow: 0 0 8px rgba(255,223,150,0.4);
+  }
+
+  p {
+    font-size: 18px;
+    color: #fffacd;
+    margin-bottom: 20px;
+  }
+
+  .highlight {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #ffd580;
+    margin: 20px 0;
+  }
+
+  .model-info {
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    background: linear-gradient(90deg,#ff8c00,#ff4500);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 18px rgba(255,140,0,0.6);
+    text-decoration: none;
+  }
+
+  .back-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg,#ffa500,#ff6347);
+    box-shadow: 0 0 25px rgba(255,140,0,0.8);
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 30px 15px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 20px; }
+    p { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="container">
+    <h1>🌬️ About Wind Energy Prediction</h1>
+
+    <h2>What is Wind Energy?</h2>
+    <p>
+      Wind energy is a renewable energy source that harnesses the power of wind to generate electricity.
+      Wind turbines convert the kinetic energy from moving air into mechanical power, which is then
+      transformed into electrical energy. This clean energy source plays a crucial role in reducing
+      greenhouse gas emissions and combating climate change.
+    </p>
+
+    <div class="highlight">
+      <p><strong>Did you know?</strong> Wind energy is one of the fastest-growing renewable energy sources,
+      with global capacity increasing by over 50% in recent years.</p>
+    </div>
+
+    <h2>How Our Prediction Works</h2>
+    <p>
+      Our wind energy prediction system uses machine learning algorithms to forecast turbine energy output
+      based on various environmental factors. The model analyzes weather parameters to provide accurate
+      predictions that help optimize energy production and planning.
+    </p>
+
+    <div class="model-info">
+      <h3>Prediction Model Details</h3>
+      <p><strong>Algorithm:</strong> Random Forest Regressor</p>
+      <p><strong>Input Parameters:</strong></p>
+      <ul>
+        <li>Wind Speed (m/s)</li>
+        <li>Temperature (°C)</li>
+        <li>Humidity (%)</li>
+        <li>Pressure (hPa)</li>
+        <li>Location Type (Coastal, Inland, Mountain)</li>
+      </ul>
+      <p><strong>Location Adjustments:</strong></p>
+      <ul>
+        <li>Coastal: 20% increase (higher wind speeds)</li>
+        <li>Inland: Standard prediction</li>
+        <li>Mountain: 30% increase (higher wind speeds)</li>
+      </ul>
+    </div>
+
+    <h2>Benefits of Wind Energy</h2>
+    <p>
+      Wind energy offers numerous advantages:
+    </p>
+    <ul>
+      <li><strong>Clean and Renewable:</strong> Produces no greenhouse gases during operation</li>
+      <li><strong>Cost-Effective:</strong> Low operational costs once installed</li>
+      <li><strong>Scalable:</strong> Can be deployed from small residential to large utility-scale projects</li>
+      <li><strong>Job Creation:</strong> Supports employment in manufacturing, installation, and maintenance</li>
+      <li><strong>Energy Independence:</strong> Reduces reliance on fossil fuel imports</li>
+    </ul>
+
+    <h2>Future of Wind Energy</h2>
+    <p>
+      The future of wind energy looks promising with ongoing technological advancements:
+    </p>
+    <ul>
+      <li>Offshore wind farms in deeper waters</li>
+      <li>Larger, more efficient turbine designs</li>
+      <li>Advanced materials for lighter, stronger blades</li>
+      <li>Integration with energy storage systems</li>
+      <li>AI-powered predictive maintenance</li>
+    </ul>
+
+    <a href="/" class="back-btn">← Back to Home</a>
+  </div>
+</body>
+</html>

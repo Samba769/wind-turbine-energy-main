@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wind Turbine Energy</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: url('{{ url_for("static", filename="images/turbine.jpg") }}') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+  }
+
+  .overlay {
+    position: absolute; top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.55); z-index:0;
+  }
+
+  .container {
+    position: relative; z-index:1;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+    gap: 50px;
+    padding: 0 50px;
+  }
+
+  .content {
+    flex: 1;
+    max-width: 500px;
+  }
+
+  .content h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #ffd580;
+    text-shadow: 0 0 10px rgba(255,223,150,0.5);
+  }
+
+  .content p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #fffacd;
+  }
+
+  .image {
+    flex: 1;
+    max-width: 500px;
+  }
+
+  .image img {
+    width: 100%;
+    border-radius: 25px;
+    box-shadow: 0 0 25px rgba(255,165,0,0.6);
+    transition: transform 0.3s ease;
+  }
+
+  .image img:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      padding: 20px;
+    }
+    .content, .image {
+      max-width: 100%;
+    }
+    .content h1 { font-size: 32px; }
+    .content p { font-size: 16px; }
+  }
+
+  .start-btn {
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    background: linear-gradient(90deg,#ff8c00,#ff4500);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 18px rgba(255,140,0,0.6);
+  }
+
+  .start-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg,#ffa500,#ff6347);
+    box-shadow: 0 0 25px rgba(255,140,0,0.8);
+  }
+
+  .link-btn {
+    margin: 5px 0;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 2px solid #ffd580;
+    background: transparent;
+    color: #ffd580;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .link-btn:hover {
+    background: #ffd580;
+    color: #333;
+    transform: scale(1.05);
+  }
+
+  .button-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+</style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="content">
+      <h1>🌬️ Wind Turbine Energy</h1>
+       <p>
+        Wind energy is one of the cleanest and most sustainable sources of renewable power. 
+        By converting the kinetic energy of wind into electricity, wind turbines help reduce 
+        carbon emissions and promote a greener future.
+      </p>
+      <p>
+        Modern wind turbines can produce electricity even at low wind speeds, making them 
+        highly efficient in various geographic locations. Proper prediction of wind energy output 
+        helps in planning energy distribution, reducing wastage, and ensuring consistent power supply.
+      </p>
+      <p>
+        Investing in wind energy not only contributes to a sustainable environment but also supports 
+        technological advancement and economic growth by creating jobs in manufacturing, installation, 
+        and maintenance sectors.
+      </p>
+        <button class="link-btn" onclick="window.location.href='/about'">Learn More About Wind Energy →</button>
+        <button class="link-btn" onclick="window.location.href='/visualization'">View Data Visualization →</button>
+        <div class="button-row">
+        <button class="start-btn" onclick="window.location.href='/predict'">Start Prediction</button>
+      </div>
+    </div>
+    <div class="image">
+    </div>
+  </div>
+</body>
+</html>

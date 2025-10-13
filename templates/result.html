@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wind Turbine Energy Result</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    height: 100vh; display: flex; justify-content: center; align-items: center;
+    background: url('{{ url_for("static", filename="images/winds.jpg") }}') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  .overlay {
+    position: absolute; top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.45); z-index:0;
+  }
+
+  .result-box {
+    position: relative; z-index: 1;
+    width: 400px; padding: 40px 35px;
+    border-radius: 35px 5px 35px 5px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.5), 0 0 35px rgba(255,165,0,0.2);
+    text-align: center; color: #ffd580;
+    animation: floatDiagonal 3s ease-in-out infinite alternate;
+  }
+
+  /* Diagonal floating animation */
+  @keyframes floatDiagonal {
+    0% { transform: translate(0px, 0px); }
+    50% { transform: translate(15px, -10px); }
+    100% { transform: translate(0px, 0px); }
+  }
+
+  h2 {
+    font-size: 28px; margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(255,223,150,0.5);
+  }
+
+  .prediction {
+    font-size: 36px; font-weight: bold; margin-top: 20px;
+    color: #fffacd;
+    text-shadow: 0 0 15px #ffd580, 0 0 25px #ffb347, 0 0 35px #ffa500;
+    animation: glowPulse 1.5s infinite alternate;
+  }
+
+  @keyframes glowPulse {
+    0% { text-shadow: 0 0 10px #ffd580, 0 0 20px #ffb347, 0 0 30px #ffa500; }
+    50% { text-shadow: 0 0 20px #ffd580, 0 0 35px #ffb347, 0 0 50px #ffa500; }
+    100% { text-shadow: 0 0 15px #ffd580, 0 0 30px #ffb347, 0 0 45px #ffa500; }
+  }
+
+  .back-btn {
+    margin-top: 25px; padding: 12px 30px;
+    border-radius: 25px; border: none; font-weight: bold;
+    background: linear-gradient(90deg,#ff8c00,#ff4500);
+    color: rgb(2, 2, 2); font-size: 16px; cursor: pointer;
+    transition: all 0.3s ease; box-shadow: 0 0 18px rgba(255,140,0,0.6);
+  }
+
+  .back-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg,#ffa500,#ff6347);
+    box-shadow: 0 0 25px rgba(255,140,0,0.8);
+  }
+
+  .location {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: black;
+    text-shadow: none;
+  }
+
+</style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="result-box">
+    <h2>🌬️ Predicted Energy Output</h2>
+    <div class="location">Location: {{ location }}</div>
+    <div class="prediction" id="energy">0 kW</div>
+    <button class="back-btn" onclick="window.location.href='/predict'">Back To Prediction</button>
+  </div>
+
+  <script>
+    // Animate counting up
+    const target = {{ prediction|tojson }};
+    const element = document.getElementById('energy');
+    let start = 0;
+
+    function animate() {
+      start += 1;
+      if (start <= target) {
+        element.innerHTML = start.toFixed(1) + " kW";
+        requestAnimationFrame(animate);
+      } else {
+        element.innerHTML = target.toFixed(1) + " kW";
+      }
+    }
+
+    animate();
+  </script>
+</body>
+</html>
