@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Farm Scenario Dashboard</title>
+    <style>
+        body {
+            margin: 0; padding: 0; font-family: "Poppins", Arial, sans-serif;
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            background: url('{{ url_for("static", filename="images/winds.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
+            flex-direction: column; /* Allow vertical stacking if content is tall */
+        }
+        .overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.45); z-index:0;
+        }
+        .container {
+            position: relative; z-index: 1; max-width: 1200px; padding: 40px 35px;
+            border-radius: 35px 5px 35px 5px; backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.5), 0 0 35px rgba(255,165,0,0.2);
+            text-align: center; color: #ffd580; margin: 20px auto;
+        }
+        h1 {
+            font-size: 36px; margin-bottom: 25px; color: #fffacd;
+            text-shadow: 0 0 15px #ffd580, 0 0 25px #ffb347, 0 0 35px #ffa500;
+        }
+        h2 {
+            font-size: 28px; margin-top: 30px; margin-bottom: 20px;
+            color: #fffacd; text-shadow: 0 0 10px rgba(255,223,150,0.5);
+            border-bottom: 2px solid rgba(255,165,0,0.5); padding-bottom: 5px;
+        }
+        .scenario-box {
+            background: rgba(255,255,255,0.08); /* Lighter transparency */
+            border: 1px solid rgba(255,255,255,0.15);
+            border-left: 5px solid #ffaa00; /* Amber for primary info */
+            padding: 20px; margin-bottom: 20px; border-radius: 15px 5px;
+            text-align: left; color: #fdf5e6;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .scenario-box.alert {
+            border-left-color: #f5222d; /* Red for alerts */
+            box-shadow: 0 5px 15px rgba(245,34,45,0.3);
+            background: rgba(245,34,45,0.08); /* Red tint */
+        }
+        .scenario-box p { margin: 8px 0; font-size: 17px; }
+        .scenario-box strong { color: #ffe0b3; }
+        .scenario-box.alert strong { color: #ffccc7; } /* Lighter red for text */
+
+        table {
+            width: 100%; border-collapse: collapse; margin-top: 15px;
+            background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden;
+            color: #fdf5e6;
+        }
+        th, td {
+            border: 1px solid rgba(255,255,255,0.1); padding: 12px; text-align: left;
+        }
+        th {
+            background-color: rgba(255,165,0,0.4); /* Darker amber header */
+            color: white; font-weight: bold;
+        }
+        tr:nth-child(even) { background-color: rgba(255,255,255,0.03); }
+        tr:hover { background-color: rgba(255,165,0,0.2); transition: background-color 0.3s ease; }
+
+        canvas {
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .back-btn {
+            margin-top: 35px; padding: 12px 30px; border-radius: 25px; border: none;
+            font-weight: bold; background: linear-gradient(90deg,#ff8c00,#ff4500);
+            color: white; font-size: 16px; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 0 18px rgba(255,140,0,0.6);
+        }
+        .back-btn:hover {
+            transform: scale(1.05); box-shadow: 0 0 25px rgba(255,140,0,0.8);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h1>🌬️ Wind Farm Scenario Dashboard</h1>
+        <p style="color: #fdf5e6; font-size: 18px;">Analyzing the next 48 hours for optimal operations.</p>
+        
+        <h2>Scenario 2: Maintenance Planning 🛠️</h2>
+        <div class="scenario-box">
+            <p><strong>Optimal 4-Hour Maintenance Window:</strong></p>
+            <p><strong>Start:</strong> {{ maintenance.start }}</p>
+            <p><strong>End:</strong> {{ maintenance.end }}</p>
+            <p><strong>Reason:</strong> This period is projected to have the lowest average energy output, minimizing operational impact.</p>
+            <p><strong>Average Power During Window:</strong> <span style="font-size: 20px; color: #ffeb3b;">{{ "%.2f"|format(maintenance.avg_power_kw) }} kW</span></p>
+        </div>
+
+        <h2>Scenario 3: Grid Integration Alerts 🚨</h2>
+        <div class="scenario-box alert">
+            <p><strong>Grid Operator Alerts for the Next 48 Hours:</strong></p>
+            {% if alerts %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Predicted (kW)</th>
+                            <th>Alert Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alert in alerts %}
+                        <tr>
+                            <td>Day {{ alert.day }}, Month {{ alert.month }}, Hour {{ alert.hour }}</td>
+                            <td>{{ "%.2f"|format(alert.Predicted_kW) }}</td>
+                            <td><span style="color: #ffccc7;">{{ alert.Alert }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p><strong>No significant grid alerts.</strong> Predicted production is within acceptable thresholds for the next 48 hours.</p>
+            {% endif %}
+        </div>
+
+        <h2>Scenario 1: 48-Hour Power Forecast (kW) 📈</h2>
+        <canvas id="forecastChart" width="800" height="400"></canvas>
+        <button class="back-btn" onclick="window.location.href='/'">Back To Home</button>
+    </div>
+
+<script>
+    // Get the chart data from Flask
+    const chartData = {{ chart_data | tojson }};
+
+    // Prepare data for Chart.js
+    const labels = chartData.map(d => `D${d.day} H${d.hour}`);
+    const powerData = chartData.map(d => d.Predicted_kW);
+
+    const ctx = document.getElementById('forecastChart').getContext('2d');
+    const forecastChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Predicted Power (kW)',
+                data: powerData,
+                backgroundColor: 'rgba(255, 165, 0, 0.2)', /* Orange tint */
+                borderColor: 'rgba(255, 165, 0, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Power (kW)',
+                        color: '#fdf5e6'
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.1)'
+                    },
+                    ticks: {
+                        color: '#fdf5e6'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Forecast Hour (Day/Hour)',
+                        color: '#fdf5e6'
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.1)'
+                    },
+                    ticks: {
+                        color: '#fdf5e6'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#fdf5e6'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff'
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
