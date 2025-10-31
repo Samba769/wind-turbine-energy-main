@@ -5,76 +5,100 @@
 <title>Wind Turbine Energy Result</title>
 <style>
   body {
-    margin: 0; padding: 0;
-    font-family: "Poppins", Arial, sans-serif;
+    margin: 0; padding: 0; font-family: "Poppins", Arial, sans-serif;
     height: 100vh; display: flex; justify-content: center; align-items: center;
     background: url('{{ url_for("static", filename="images/winds.jpg") }}') no-repeat center center fixed;
     background-size: cover;
   }
-
   .overlay {
-    position: absolute; top:0; left:0;
-    width:100%; height:100%;
+    position: absolute; top:0; left:0; width:100%; height:100%;
     background: rgba(0,0,0,0.45); z-index:0;
   }
-
   .result-box {
-    position: relative; z-index: 1;
-    width: 400px; padding: 40px 35px;
-    border-radius: 35px 5px 35px 5px;
-    backdrop-filter: blur(20px);
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.25);
+    position: relative; z-index: 1; width: 450px; /* Made slightly wider */
+    padding: 40px 35px;
+    border-radius: 35px 5px 35px 5px; backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.25);
     box-shadow: 0 12px 35px rgba(0,0,0,0.5), 0 0 35px rgba(255,165,0,0.2);
     text-align: center; color: #ffd580;
-    animation: floatDiagonal 3s ease-in-out infinite alternate;
   }
-
-  /* Diagonal floating animation */
-  @keyframes floatDiagonal {
-    0% { transform: translate(0px, 0px); }
-    50% { transform: translate(15px, -10px); }
-    100% { transform: translate(0px, 0px); }
-  }
-
   h2 {
     font-size: 28px; margin-bottom: 25px;
     text-shadow: 0 0 10px rgba(255,223,150,0.5);
   }
-
   .prediction {
-    font-size: 36px; font-weight: bold; margin-top: 20px;
-    color: #fffacd;
+    font-size: 36px; font-weight: bold; margin-top: 20px; color: #fffacd;
     text-shadow: 0 0 15px #ffd580, 0 0 25px #ffb347, 0 0 35px #ffa500;
     animation: glowPulse 1.5s infinite alternate;
   }
-
   @keyframes glowPulse {
-    0% { text-shadow: 0 0 10px #ffd580, 0 0 20px #ffb347, 0 0 30px #ffa500; }
-    50% { text-shadow: 0 0 20px #ffd580, 0 0 35px #ffb347, 0 0 50px #ffa500; }
-    100% { text-shadow: 0 0 15px #ffd580, 0 0 30px #ffb347, 0 0 45px #ffa500; }
+    from { text-shadow: 0 0 10px #ffd580, 0 0 20px #ffb347, 0 0 30px #ffa500; }
+    to { text-shadow: 0 0 20px #ffd580, 0 0 35px #ffb347, 0 0 50px #ffa500; }
   }
-
   .back-btn {
-    margin-top: 25px; padding: 12px 30px;
-    border-radius: 25px; border: none; font-weight: bold;
-    background: linear-gradient(90deg,#ff8c00,#ff4500);
-    color: rgb(2, 2, 2); font-size: 16px; cursor: pointer;
+    margin-top: 30px; /* Increased margin */
+    padding: 12px 30px; border-radius: 25px; border: none;
+    font-weight: bold; background: linear-gradient(90deg,#ff8c00,#ff4500);
+    color: white; font-size: 16px; cursor: pointer;
     transition: all 0.3s ease; box-shadow: 0 0 18px rgba(255,140,0,0.6);
   }
-
   .back-btn:hover {
-    transform: scale(1.05);
-    background: linear-gradient(90deg,#ffa500,#ff6347);
-    box-shadow: 0 0 25px rgba(255,140,0,0.8);
+    transform: scale(1.05); box-shadow: 0 0 25px rgba(255,140,0,0.8);
   }
+  .location { font-size: 20px; margin-bottom: 10px; color: #fffacd; }
 
-  .location {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: black;
-    text-shadow: none;
+  /* --- CSS FOR SCENARIO 3 ALERT --- */
+  .scenario-box {
+    background: rgba(255, 251, 230, 0.1); /* Light yellow tint */
+    border: 1px solid rgba(250, 219, 139, 0.3);
+    border-left: 5px solid #fadb14; /* Yellow border for "Normal" */
+    padding: 15px 20px;
+    margin-top: 30px;
+    border-radius: 10px 4px;
+    text-align: left;
+    color: #fffbe6;
+    font-size: 16px;
   }
+  
+  /* Conditional style if it's an ALERT */
+  {% if 'ALERT' in alert %}
+  .scenario-box {
+    background: rgba(245, 34, 45, 0.08); /* Red tint */
+    border-color: rgba(255, 163, 158, 0.3);
+    border-left-color: #f5222d; /* Red border for "Alert" */
+    color: #ffccc7;
+  }
+  {% endif %}
+
+  .scenario-box h3 {
+    margin: 0 0 8px 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff; /* White header for both */
+  }
+  .scenario-box p {
+    margin: 0;
+    padding: 0;
+  }
+  /* ------------------------------------- */
+
+  /* --- NEW CSS FOR DASHBOARD LINK --- */
+  .dashboard-link {
+    display: block;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ffeb3b; /* Bright yellow */
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .dashboard-link:hover {
+    text-decoration: underline;
+    color: #fff;
+    transform: scale(1.05);
+  }
+  /* ---------------------------------- */
 
 </style>
 </head>
@@ -83,27 +107,68 @@
   <div class="result-box">
     <h2>🌬️ Predicted Energy Output</h2>
     <div class="location">Location: {{ location }}</div>
-    <div class="prediction" id="energy">0 kW</div>
+    <div class="prediction" id="energy">0.0 kW</div>
+
+    <div class="scenario-box">
+        <h3>🚨 Grid Alert (Current Time)</h3>
+        <p><strong>{{ alert }}</strong></p>
+    </div>
+    
     <button class="back-btn" onclick="window.location.href='/predict'">Back To Prediction</button>
+    
+    <a href="/scenario_dashboard" class="dashboard-link">View Full Scenario Dashboard 📈</a>
   </div>
 
   <script>
-    // Animate counting up
-    const target = {{ prediction|tojson }};
+    // --- This is your existing animation script ---
+    const targetValue = {{ prediction|default(0)|tojson }};
     const element = document.getElementById('energy');
-    let start = 0;
+    const duration = 1000; // 1 second animation
+    let startTime = null;
 
-    function animate() {
-      start += 1;
-      if (start <= target) {
-        element.innerHTML = start.toFixed(1) + " kW";
+    function animate(currentTime) {
+      if (startTime === null) startTime = currentTime;
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      
+      const currentValue = progress * targetValue;
+      element.innerHTML = currentValue.toFixed(1) + " kW";
+      
+      if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
-        element.innerHTML = target.toFixed(1) + " kW";
+        element.innerHTML = targetValue.toFixed(1) + " kW";
       }
     }
+    requestAnimationFrame(animate);
 
-    animate();
+    // --- NEW SCRIPT FOR SOUND ALERT (AUTOPLAY FIX) ---
+    const playSound = {{ play_sound|default(false)|tojson }};
+
+    if (playSound) {
+        const alertSound = new Audio("{{ url_for('static', filename='sounds/alert.mp3') }}");
+        
+        // Try to play immediately
+        let playPromise = alertSound.play();
+
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                // Autoplay was blocked.
+                console.warn("Audio autoplay was blocked. Waiting for user click.");
+                
+                // Create a function to play sound on the *first* user click
+                const playOnFirstClick = () => {
+                    alertSound.play().catch(e => console.error("Sound play failed after click:", e));
+                    // Remove this listener so it only runs once
+                    document.removeEventListener('click', playOnFirstClick);
+                };
+                
+                // Add the listener to the whole page
+                document.addEventListener('click', playOnFirstClick);
+            });
+        }
+    }
+    // ---------------------------------
   </script>
 </body>
 </html>
